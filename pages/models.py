@@ -1,6 +1,7 @@
 from django.db import models
 
 class Plugin(models.Model):
+    image = models.ImageField(upload_to='plugins/', blank=True, null=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
