@@ -1,0 +1,56 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="container py-5 text-center">
+    <h1>{{ title }}</h1>
+    <p class="lead">{{ welcome_text }}</p>
+    <a href="#" class="btn btn-primary btn-lg">Начать</a>
+</div>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img src="{% static 'assets/images/guitars.png' %}" class="card-img-top" alt="book">
+                    <div class="card-body">
+                        <h5 class="card-title">Гитары</h5>
+                        <p class="card-text">Акустические, электрические, басовые</p>
+                        <a href="#" class="btn btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img src="{% static 'assets/images/drums.png' %}" class="card-img-top" alt="book">
+                    <div class="card-body">
+                        <h5 class="card-title">Перкуссия</h5>
+                        <p class="card-text">Барабаны, тарелки, ударные инструменты</p>
+                        <a href="#" class="btn btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <img src="{% static 'assets/images/synths.png' %}" class="card-img-top" alt="book">
+                    <div class="card-body">
+                        <h5 class="card-title">Синтезаторы</h5>
+                        <p class="card-text">Аналоговые, цифровые, модульные</p>
+                        <a href="#" class="btn btn-outline-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
