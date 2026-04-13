@@ -38,7 +38,7 @@
                                 <strong>Цена:</strong> {{ item.price }}
                             </p>
 
-                            <a href="#" class="btn btn-outline-primary">Подробнее</a>
+                            <a href="{% url 'plugin_detail' item.pk %}" class="btn btn-outline-primary">Подробнее</a>
                         </div>
 
                     </div>
