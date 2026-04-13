@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Plugin
 
 def index(request):
@@ -15,3 +15,9 @@ def index(request):
 def about(request):
     return render(request, 'pages/about.html')
 
+def plugin_detail(request, pk):
+    plugin = get_object_or_404(Plugin, pk=pk)
+
+    return render(request, 'pages/detail.html', {
+        'plugin': plugin
+    })

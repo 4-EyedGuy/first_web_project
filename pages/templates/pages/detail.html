@@ -1,0 +1,29 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}{{ plugin.name }}{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h1>{{ plugin.name }}</h1>
+
+    {% if plugin.image %}
+        <img src="{{ plugin.image.url }}" class="img-fluid mb-3">
+    {% endif %}
+
+    <p>{{ plugin.description }}</p>
+
+    <p><strong>Цена:</strong> {{ plugin.price }}</p>
+
+    <p class="text-muted">
+        Добавлено: {{ plugin.created_at|date:"d.m.Y" }}
+    </p>
+
+    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">
+        ← Назад
+    </a>
+
+</div>
+
+{% endblock %}
