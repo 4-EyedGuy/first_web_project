@@ -4,12 +4,16 @@
 
 {% block content %}
 
+{% load static %}
+
 <div class="container py-5">
 
     <h1>{{ plugin.name }}</h1>
 
     {% if plugin.image %}
         <img src="{{ plugin.image.url }}" class="img-fluid mb-3">
+    {% else %}
+        <img src="{% static 'images/image.png' %}" alt="image">
     {% endif %}
 
     <p>{{ plugin.description }}</p>
