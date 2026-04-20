@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Plugin
+from .forms import FeedbackForm
+from django.shortcuts import redirect
 
 def index(request):
     items = Plugin.objects.all()
@@ -21,3 +23,17 @@ def plugin_detail(request, pk):
     return render(request, 'pages/detail.html', {
         'plugin': plugin
     })
+
+def contact(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+
+        if form.is_valid():
+            print(form.cleaned_data)
+
+            return redirect('home')
+
+    else:
+        form = FeedbackForm()
+
+    return render(request, 'pages/contact.html', {'form': form})

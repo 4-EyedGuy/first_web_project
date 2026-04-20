@@ -1,0 +1,35 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+    <h1>Обратная связь</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            {{ form.subject.label_tag }}
+            {{ form.subject }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.text.label_tag }}
+            {{ form.text }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Отправить
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}
