@@ -11,9 +11,15 @@
     <h1>{{ plugin.name }}</h1>
 
     {% if plugin.image %}
-        <img src="{{ plugin.image.url }}" class="img-fluid mb-3">
+        <img src="{{ plugin.image.url }}" class="mb-3 rounded d-block"
+             width="512" height="512"
+             style="width: 512px; height: 512px; object-fit: cover;"
+             alt="{{ plugin.name }}">
     {% else %}
-        <img src="{% static 'images/image.png' %}" alt="image">
+        <img src="{% static 'images/image.png' %}" class="mb-3 rounded d-block"
+             width="512" height="512"
+             style="width: 512px; height: 512px; object-fit: cover;"
+             alt="{{ plugin.name }}">
     {% endif %}
 
     <p>{{ plugin.description }}</p>
@@ -24,10 +30,69 @@
         Добавлено: {{ plugin.created_at|date:"d.m.Y" }}
     </p>
 
-    <a href="{% url 'home' %}" class="btn btn-secondary mt-3">
+    <a href="{% url 'home' %}" class="btn btn-secondary">
         ← Назад
     </a>
 
+    <a href="{% url 'plugin_update' plugin.pk %}" class="btn btn-warning">
+        Редактировать
+    </a>
+
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        Удалить
+    </button>
+
 </div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1"
+     data-show-on-load="{% if show_delete_modal %}1{% else %}0{% endif %}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Подтверждение удаления</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                Вы уверены, что хотите удалить "{{ plugin.name }}"?
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Отмена
+                </button>
+
+                <form method="post" action="{% url 'plugin_delete' plugin.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        Удалить
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const el = document.getElementById('deleteModal');
+        if (!el) {
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const openDelete = el.dataset.showOnLoad === '1'
+            || urlParams.get('delete') === '1';
+
+        if (openDelete) {
+            const modal = new bootstrap.Modal(el);
+            modal.show();
+        }
+    });
+</script>
 
 {% endblock %}
