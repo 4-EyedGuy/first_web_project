@@ -1,7 +1,9 @@
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
+
+from .forms import FeedbackForm, PluginForm, RegisterForm
 from .models import Plugin
-from .forms import FeedbackForm
-from .forms import PluginForm
 
 def index(request):
     items = Plugin.objects.all()
@@ -24,6 +26,24 @@ def plugin_detail(request, pk):
         'plugin': plugin
     })
 
+@login_required
+def account(request):
+    return render(request, 'pages/account.html')
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = RegisterForm()
+
+    return render(request, 'registration/register.html', {'form': form})
+
+
 def contact(request):
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
@@ -38,12 +58,15 @@ def contact(request):
 
     return render(request, 'pages/contact.html', {'form': form})
 
+@login_required
 def plugin_create(request):
     if request.method == 'POST':
         form = PluginForm(request.POST, request.FILES)
 
         if form.is_valid():
-            plugin = form.save()
+            plugin = form.save(commit=False)
+            plugin.author = request.user
+            plugin.save()
             return redirect(plugin.get_absolute_url())
 
     else:
@@ -54,6 +77,7 @@ def plugin_create(request):
         'title': 'Добавить плагин'
     })
 
+@login_required
 def plugin_update(request, pk):
     plugin = get_object_or_404(Plugin, pk=pk)
 
@@ -72,6 +96,7 @@ def plugin_update(request, pk):
         'title': 'Редактировать плагин'
     })
 
+@login_required
 def plugin_delete(request, pk):
     plugin = get_object_or_404(Plugin, pk=pk)
 

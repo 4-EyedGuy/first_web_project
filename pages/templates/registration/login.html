@@ -1,0 +1,33 @@
+{% extends 'pages/base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 480px;">
+    <h1 class="mb-4">Вход</h1>
+
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            Неверное имя пользователя или пароль. Попробуйте снова.
+        </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Войти</button>
+        <a href="{% url 'home' %}" class="btn btn-secondary">На главную</a>
+    </form>
+
+    <p class="mt-3 text-muted">
+        Нет аккаунта?
+        <a href="{% url 'register' %}">Зарегистрируйтесь</a>
+    </p>
+</div>
+{% endblock %}

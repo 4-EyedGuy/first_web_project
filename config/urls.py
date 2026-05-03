@@ -1,11 +1,25 @@
 from django.contrib import admin
-from django.urls import path
-from pages.views import index, about, plugin_detail, contact, plugin_create, plugin_update, plugin_delete
+from django.urls import include, path
+
+from pages.views import (
+    about,
+    account,
+    contact,
+    index,
+    plugin_create,
+    plugin_delete,
+    plugin_detail,
+    plugin_update,
+    register,
+)
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/register/', register, name='register'),
+    path('accounts/profile/', account, name='account'),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('', index, name='home'),
     path('about/', about, name='about'),
     path('contact/', contact, name='contact'),
