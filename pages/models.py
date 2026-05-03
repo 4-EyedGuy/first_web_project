@@ -1,7 +1,14 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 
+
 class Plugin(models.Model):
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='plugins',
+    )
     image = models.ImageField(upload_to='plugins/', blank=True, null=True)
     name = models.CharField(max_length=100)
     description = models.TextField()
