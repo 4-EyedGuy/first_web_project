@@ -12,6 +12,7 @@ from pages.views import (
     plugin_update,
     register,
     tag_detail,
+    add_comment,
 )
 from django.conf import settings
 from django.conf.urls.static import static
@@ -28,6 +29,7 @@ urlpatterns = [
     path('plugin/add/', plugin_create, name='plugin_create'),
     path('plugin/<int:pk>/edit/', plugin_update, name='plugin_update'),
     path('plugin/<int:pk>/delete/', plugin_delete, name='plugin_delete'),
+    path('plugin/<int:pk>/comment/add/', add_comment, name='add_comment'),
     path('tag/<int:pk>/', tag_detail, name='tag_detail'),
 ]
 
