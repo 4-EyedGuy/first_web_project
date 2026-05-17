@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import FeedbackForm, PluginForm, RegisterForm
-from .models import Plugin
+from .models import Plugin, Tag
 
 def index(request):
     items = Plugin.objects.all()
@@ -108,3 +108,15 @@ def plugin_delete(request, pk):
         'plugin': plugin,
         'show_delete_modal': True,
     })
+
+def tag_detail(request, pk):
+    tag = get_object_or_404(Tag, pk=pk)
+    items = tag.plugins.all()
+
+    context = {
+        'title': f'Плагины с тегом: {tag.name}',
+        'tag': tag,
+        'items': items
+    }
+
+    return render(request, 'pages/index.html', context)
