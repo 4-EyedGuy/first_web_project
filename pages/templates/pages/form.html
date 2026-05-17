@@ -10,7 +10,25 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        {{ form.as_p }}
+        {% for field in form %}
+            <div class="mb-3">
+                {{ field.label_tag }}
+                {% if field.name == 'tags' %}
+                    <div class="tags-checkboxes">
+                        {% for checkbox in field %}
+                            <div class="form-check">
+                                {{ checkbox }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ field }}
+                {% endif %}
+                {% if field.errors %}
+                    <div class="text-danger">{{ field.errors }}</div>
+                {% endif %}
+            </div>
+        {% endfor %}
 
         <button type="submit" class="btn btn-success">
             Сохранить

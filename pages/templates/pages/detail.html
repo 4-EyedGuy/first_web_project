@@ -26,6 +26,17 @@
 
     <p><strong>Цена:</strong> {{ plugin.price }}</p>
 
+    {% if plugin.tags.all %}
+    <p>
+        <strong>Теги:</strong>
+        {% for tag in plugin.tags.all %}
+            <a href="{% url 'tag_detail' tag.pk %}" class="badge bg-info text-decoration-none">
+                {{ tag.name }}
+            </a>
+        {% endfor %}
+    </p>
+    {% endif %}
+
     <p class="text-muted">
         Добавлено: {{ plugin.created_at|date:"d.m.Y" }}
     </p>
