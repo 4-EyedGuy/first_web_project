@@ -1,9 +1,10 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 
-from .forms import FeedbackForm, PluginForm, RegisterForm
-from .models import Plugin, Tag
+from .forms import FeedbackForm, PluginForm, RegisterForm, CommentForm
+from .models import Plugin, Tag, Comment
 
 def index(request):
     items = Plugin.objects.all()
@@ -21,9 +22,11 @@ def about(request):
 
 def plugin_detail(request, pk):
     plugin = get_object_or_404(Plugin, pk=pk)
+    form = CommentForm()
 
     return render(request, 'pages/detail.html', {
-        'plugin': plugin
+        'plugin': plugin,
+        'form': form
     })
 
 @login_required
@@ -37,7 +40,10 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
+            messages.success(request, 'Вы успешно зарегистрировались!')
             return redirect('home')
+        else:
+            messages.error(request, 'Ошибка при регистрации. Проверьте поля формы.')
     else:
         form = RegisterForm()
 
@@ -67,7 +73,11 @@ def plugin_create(request):
             plugin = form.save(commit=False)
             plugin.author = request.user
             plugin.save()
+            form.save_m2m()
+            messages.success(request, 'Плагин успешно добавлен!')
             return redirect(plugin.get_absolute_url())
+        else:
+            messages.error(request, 'Ошибка при добавлении плагина. Проверьте поля формы.')
 
     else:
         form = PluginForm()
@@ -86,7 +96,10 @@ def plugin_update(request, pk):
 
         if form.is_valid():
             form.save()
+            messages.success(request, 'Плагин успешно обновлен!')
             return redirect(plugin.get_absolute_url())
+        else:
+            messages.error(request, 'Ошибка при обновлении плагина. Проверьте поля формы.')
 
     else:
         form = PluginForm(instance=plugin)
@@ -102,6 +115,7 @@ def plugin_delete(request, pk):
 
     if request.method == 'POST':
         plugin.delete()
+        messages.success(request, 'Плагин успешно удален!')
         return redirect('home')
 
     return render(request, 'pages/detail.html', {
@@ -120,3 +134,20 @@ def tag_detail(request, pk):
     }
 
     return render(request, 'pages/index.html', context)
+
+@login_required
+def add_comment(request, pk):
+    plugin = get_object_or_404(Plugin, pk=pk)
+    
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = plugin
+            comment.save()
+            messages.success(request, 'Комментарий успешно добавлен!')
+        else:
+            messages.error(request, 'Ошибка при добавлении комментария.')
+    
+    return redirect('plugin_detail', pk=pk)

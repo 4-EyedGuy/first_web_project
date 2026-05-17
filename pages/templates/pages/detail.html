@@ -61,6 +61,51 @@
 
 </div>
 
+<section class="py-5">
+    <div class="container">
+        <h2>Комментарии</h2>
+
+        {% if user.is_authenticated %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Добавить комментарий</h5>
+                    <form method="post" action="{% url 'add_comment' plugin.pk %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.text }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <a href="{% url 'login' %}" class="alert-link">Войдите</a> чтобы добавить комментарий.
+            </div>
+        {% endif %}
+
+        {% if plugin.comments.all %}
+            <div>
+                {% for comment in plugin.comments.all %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <strong>{{ comment.author.username }}</strong>
+                                <span class="text-muted">{{ comment.created_at|date:"d.m.Y H:i" }}</span>
+                            </h6>
+                            <p class="card-text">{{ comment.text }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-secondary">
+                Комментариев нет. Будьте первым!
+            </div>
+        {% endif %}
+    </div>
+</section>
+
 {% if user.is_authenticated %}
 <div class="modal fade" id="deleteModal" tabindex="-1"
      data-show-on-load="{% if show_delete_modal %}1{% else %}0{% endif %}">

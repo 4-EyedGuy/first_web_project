@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Plugin, Tag
+from .models import Plugin, Tag, Comment
 
 
 class RegisterForm(UserCreationForm):
@@ -38,4 +38,19 @@ class PluginForm(forms.ModelForm):
             'price': forms.NumberInput(attrs={'class': 'form-control'}),
             'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'tags': forms.CheckboxSelectMultiple()
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Напишите ваш комментарий...'
+            })
+        }
+        labels = {
+            'text': 'Комментарий'
         }

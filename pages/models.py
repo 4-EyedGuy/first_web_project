@@ -34,3 +34,24 @@ class Plugin(models.Model):
     
     class Meta:
         ordering = ['-created_at']
+
+
+class Comment(models.Model):
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
+    post = models.ForeignKey(
+        Plugin,
+        on_delete=models.CASCADE,
+        related_name='comments',
+    )
+
+    def __str__(self):
+        return f"Комментарий {self.author} к {self.post}"
+
+    class Meta:
+        ordering = ['-created_at']
